@@ -1,40 +1,38 @@
-"""
-Script that uploads a folder of images and returns a CSV
-of urls, SKUs, product names, colors, sizes, for batch
-uploading to Amazon.
-
-Author: Yakir Havin
-"""
-
-
 import os
 import base64
 import time
 
+import streamlit as st
 import requests
 import pandas as pd
-from dotenv import load_dotenv
 
 
-load_dotenv()
-API_KEY = os.getenv("API_KEY")
+st.set_page_config(page_title="Product Wizard", page_icon="👕")
+st.title("Amazon Product Wizard")
+st.caption("Developed by Yakir Havin")
+
+# Form input setup and constant declarations
 MAX_ATTEMPTS = 5
-PARENT_SKU_PREPEND = os.getenv("PARENT_SKU_PREPEND")
-PRODUCT_NAME_PREPEND = os.getenv("PRODUCT_NAME_PREPEND")
-PRODUCT_NAME_APPEND = "LGBTQ Gay Pride Novelty Hoodie"
-SIZE_LIST = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
-REPEAT_ITEMS = len(SIZE_LIST)
-CHILD_SKU_CHARS = 8
-
+form = st.form(key="input-form")
+images = form.file_uploader("Upload images", accept_multiple_files=True, type=["png", "jpg"])
+form.info("Note: Image filenames must end with color preceded by space or hyphen, e.g., 'Zen Ramen Bowl T-Shirt Blue.png'")
+API_KEY = form.text_input("API key", value="8c14c34665298adb85a1b59a841fb72b").strip()
+PARENT_SKU_PREFIX = form.text_input("Parent SKU prefix", placeholder="e.g., SH, TNK, HDIE").strip()
+PRODUCT_NAME_PREFIX = form.text_input("Product name prefix", value="On Coast").strip()
+PRODUCT_NAME_APPEND = form.text_input("Product name appended words", placeholder="e.g., Celebratory Novelty T-Shirt").strip()
+size_list_options = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
+SIZE_LIST = form.multiselect("Sizes", options=size_list_options, default=size_list_options)
 size_mapping = {value: index for index, value in enumerate(SIZE_LIST)}
-files = os.listdir("images")
-images = [file for file in files if file.endswith((".png", ".jpg", ".jpeg"))]
+CHILD_SKU_CHARS = form.number_input("Child SKU characters", min_value=6, max_value=12, value=8)
 
+submit = form.form_submit_button("Submit")
 
-def encode(image_path):
+############################################
+
+def encode(image):
     """Encode image as base64 string."""
-    with open(image_path, "rb") as image:
-        encoded_string = base64.b64encode(image.read()).decode("utf-8")
+    image_bytes = image.getvalue()
+    encoded_string = base64.b64encode(image_bytes).decode("utf-8")
     return encoded_string
 
 def upload(encoded_image):
@@ -48,28 +46,32 @@ def upload(encoded_image):
     return response.json()
 
 def get_urls():
-    """Upload images to ImgBB with retries."""
+    """Upload images to ImgBB with retries, and display progress."""
     start_time = time.time()
     files_and_urls = []
+
+    status_window = st.status("🪄 Working some magic...")
     
-    for image in images:
-        print("Start:  ", image)
-        image_path = os.path.join("images", image)
+    for i in range(len(images)):
+        image = images[i]
+        image_name = image.name
+        print("Start:  ", image_name)
 
         for attempt in range(1, MAX_ATTEMPTS + 1):
             try:
-                encoded_image = encode(image_path)
+                encoded_image = encode(image)
                 response = upload(encoded_image)
                 
                 if response["status"] == 200:
-                    print("Success:", image)
+                    print("Success:", image_name)
                     data = response["data"]
                     url = data["url"]
-                    obj = {"filename": image, "url": url}
+                    obj = {"filename": image_name, "url": url}
                     files_and_urls.append(obj)
+                    status_window.write(image_name)
                     break
                 else:
-                    print("Fail:   ", image)
+                    print("Fail:   ", image_name)
                     print(response["status"])
                     print(response["content"])
                     if attempt == MAX_ATTEMPTS:
@@ -84,8 +86,18 @@ def get_urls():
                     print("Retrying...") 
 
     end_time = time.time()
-    duration = end_time - start_time  
-    print(f"Uploaded {len(files_and_urls)}/{len(images)} images in {duration // 60:.0f}m{duration % 60:.0f}s")
+    duration = end_time - start_time
+    completion_text = f"Uploaded {len(files_and_urls)}/{len(images)} images in {duration // 60:.0f} minutes, {duration % 60:.0f} seconds"
+    print(completion_text)
+
+    if len(files_and_urls) == len(images):
+        st.success(completion_text)
+    elif len(files_and_urls) < len(images):
+        st.warning(completion_text)
+    else:
+        st.info(completion_text)
+
+    status_window.update(label="✨ Ready for download", state="complete")
 
     return files_and_urls 
 
@@ -96,13 +108,13 @@ def create_parent_sku(filename: str):
 
     # Split filename on spaces to get color from end
     filename_split = filename_no_dashes.split(" ")
-    color = filename_split[-1][:-4]  # Remove .png extension
+    color = filename_split[-1][:-4].title()  # Remove .png extension and capitalise
 
     # Remove dashes and spaces
     filename_one_word = filename.replace("-", "").replace(" ", "")
-    first_chars = filename_one_word[:CHILD_SKU_CHARS]
+    first_chars = filename_one_word[:CHILD_SKU_CHARS].upper()
 
-    parent_sku = PARENT_SKU_PREPEND + first_chars
+    parent_sku = f"{PARENT_SKU_PREFIX}-{first_chars}"
     return parent_sku, color
 
 def create_child_sku(parent_sku: str, color: str, size: str):
@@ -138,20 +150,30 @@ def create_product_name(product_object: dict):
     product = " ".join(filename_split[:-1])
     product_upper = product.title()
     size = product_object["size"]
-    product_name = f"{PRODUCT_NAME_PREPEND} {product_upper} {PRODUCT_NAME_APPEND}, {color}, {size}"
+    product_name = f"{PRODUCT_NAME_PREFIX} {product_upper} {PRODUCT_NAME_APPEND}, {color}, {size}"
     return product_name
+
+def display_download_button(df: pd.DataFrame):
+    """Display DataFrame and download button."""
+    csv = df.to_csv(index=False).encode("utf-8")
+    output_file_name = f"products_{int(time.time())}.csv"
+    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv")
+    st.dataframe(df, height=35 * len(df) + 3, hide_index=True)
 
 def main():
     """Main driver function."""
     files_and_urls = get_urls()
+    # files_and_urls = [
+    #     {"filename": "kkjbljhv blkg-hcg green.png", "url": "test1"},
+    #     {"filename": "abcbfhshs jhjhvjhjdjf black.png", "url": "test1"},
+    #     {"filename": "jhdbfldbd s;sbcsha djss blue.png", "url": "test1"},
+    # ]
     products_with_skus = add_skus(files_and_urls)
     for product in products_with_skus:
         product["product_name"] = create_product_name(product)
     products_with_skus = sorted(products_with_skus, key=lambda product: (product["filename"], size_mapping[product["size"]]))
     df = pd.DataFrame(products_with_skus)
-    csv_path = f"on_coast_products_{int(time.time())}.csv"
-    df.to_csv(csv_path, index=False)
-    print("Saved to", csv_path)
+    display_download_button(df)
 
-
-main()
+if submit:
+    main()
