@@ -169,7 +169,7 @@ def display_download_button(df: pd.DataFrame):
     st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", type="primary", key="download-top")
     st.dataframe(df, height=35 * len(df) + 3, hide_index=True)
     st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", type="primary", key="download-bottom")
-type="primary", 
+
 def main():
     """Main driver function."""
     files_and_urls = get_urls()
