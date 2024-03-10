@@ -17,11 +17,11 @@ import pandas as pd
 
 API_KEY = os.getenv("API_KEY")
 MAX_ATTEMPTS = 3
-PARENT_SKU_PREPEND = "TNK-"
-PRODUCT_NAME_PREPEND = "On Coast"
+PARENT_SKU_PREPEND = "SH-"
+PRODUCT_NAME_PREPEND = "On COast"
 # Tank tops: "Funny Gym Workout Novelty Tanktop"
 # Shirts: "Funny LGBTQ Gay Pride Month Novelty T-Shirt"
-PRODUCT_NAME_APPEND = "Funny Gym Workout Novelty Tanktop"
+PRODUCT_NAME_APPEND = "Novelty T-Shirt"
 SIZE_LIST = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 REPEAT_ITEMS = len(SIZE_LIST)
 CHILD_SKU_CHARS = 8
@@ -149,7 +149,7 @@ def main():
         {"filename": "CALM T-SHIRT BLACK.png", "url": "test1"},
         {"filename": "HYPER T-SHIRT BLUE.png", "url": "test2"},
         {"filename": "ZEN MODE GALAXY SHIRT GREY.png", "url": "test3"},
-        {"filename": "ST PATRICK'S DAY LUCKY CLOVER T-SHIRT.png", "url": "test4"},
+        {"filename": "ST PATRICK'S DAY LUCKY CLOVER T-SHIRT GREEN.png", "url": "test4"},
     ]
     products_with_skus = add_skus(files_and_urls)
     for product in products_with_skus:
