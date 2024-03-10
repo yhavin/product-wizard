@@ -1,0 +1,4 @@
+.env
+images/
+**.xlsx
+.DS_Store
