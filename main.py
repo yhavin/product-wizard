@@ -24,6 +24,7 @@ PRODUCT_NAME_PREPEND = "On Coast"
 PRODUCT_NAME_APPEND = "Funny Gym Workout Novelty Tanktop"
 SIZE_LIST = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 REPEAT_ITEMS = len(SIZE_LIST)
+CHILD_SKU_CHARS = 8
 
 size_mapping = {value: index for index, value in enumerate(SIZE_LIST)}
 files = os.listdir("images")
@@ -99,7 +100,7 @@ def create_parent_sku(filename: str):
 
     # Remove dashes and spaces
     filename_one_word = filename.replace("-", "").replace(" ", "")
-    first_chars = filename_one_word[:8]
+    first_chars = filename_one_word[:CHILD_SKU_CHARS]
 
     parent_sku = PARENT_SKU_PREPEND + first_chars
     return parent_sku, color
@@ -143,19 +144,18 @@ def create_product_name(product_object: dict):
 
 def main():
     """Main driver function."""
-    files_and_urls = get_urls()
-    # files_and_urls = [
-    #     {"filename": "ALL FOR LOVE-BLACK.png", "url": "test1"},
-    #     {"filename": "ALL FOR LOVE-GRAY.png", "url": "test2"},
-    #     {"filename": "ALL FOR LOVE-PINK.png", "url": "test3"},
-    #     {"filename": "ENGAYGED-BLACK.png", "url": "test4"},
-    # ]
+    # files_and_urls = get_urls()
+    files_and_urls = [
+        {"filename": "CALM T-SHIRT BLACK.png", "url": "test1"},
+        {"filename": "HYPER T-SHIRT BLUE.png", "url": "test2"},
+        {"filename": "ZEN MODE GALAXY SHIRT GREY.png", "url": "test3"},
+        {"filename": "ST PATRICK'S DAY LUCKY CLOVER T-SHIRT.png", "url": "test4"},
+    ]
     products_with_skus = add_skus(files_and_urls)
     for product in products_with_skus:
         product["product_name"] = create_product_name(product)
     products_with_skus = sorted(products_with_skus, key=lambda product: (product["filename"], size_mapping[product["size"]]))
     df = pd.DataFrame(products_with_skus)
-    df = df.sort_values(by=["filename"])
     csv_path = f"on_coast_products_{int(time.time())}.csv"
     df.to_csv(csv_path, index=False)
     print("Saved to", csv_path)
