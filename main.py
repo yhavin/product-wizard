@@ -1,6 +1,15 @@
-import os
+"""
+Streamlit app for uploading images and returning a CSV with
+urls, SKUs, product names, colors, sizes, for batch
+uploading to Amazon.
+
+Author: Yakir Havin
+"""
+
+
 import base64
 import time
+from datetime import datetime
 
 import streamlit as st
 import requests
@@ -156,9 +165,10 @@ def create_product_name(product_object: dict):
 def display_download_button(df: pd.DataFrame):
     """Display DataFrame and download button."""
     csv = df.to_csv(index=False).encode("utf-8")
-    output_file_name = f"products_{int(time.time())}.csv"
-    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv")
+    output_file_name = f"products_{datetime.today().strftime("%Y%m%d_%H%M%S")}.csv"
+    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", key="download-top")
     st.dataframe(df, height=35 * len(df) + 3, hide_index=True)
+    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", key="download-bottom")
 
 def main():
     """Main driver function."""
