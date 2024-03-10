@@ -25,7 +25,7 @@ MAX_ATTEMPTS = 5
 form = st.form(key="input-form")
 images = form.file_uploader("Upload images", accept_multiple_files=True, type=["png", "jpg"])
 form.info("Note: Image filenames must end with color preceded by space or hyphen, e.g., 'Zen Ramen Bowl T-Shirt Blue.png'")
-API_KEY = form.text_input("API key", value="8c14c34665298adb85a1b59a841fb72b").strip()
+API_KEY = form.text_input("API key", placeholder="ImgBB API key").strip()
 PARENT_SKU_PREFIX = form.text_input("Parent SKU prefix", placeholder="e.g., SH, TNK, HDIE").strip()
 CHILD_SKU_CHARS = form.number_input("Child SKU characters", min_value=6, max_value=12, value=8)
 PRODUCT_NAME_PREFIX = form.text_input("Product name prefix", value="On Coast").strip()
