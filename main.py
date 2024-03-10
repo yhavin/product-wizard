@@ -21,8 +21,6 @@ API_KEY = os.getenv("API_KEY")
 MAX_ATTEMPTS = 5
 PARENT_SKU_PREPEND = os.getenv("PARENT_SKU_PREPEND")
 PRODUCT_NAME_PREPEND = os.getenv("PRODUCT_NAME_PREPEND")
-# Tank tops: "Funny Gym Workout Novelty Tanktop"
-# Shirts: "Funny LGBTQ Gay Pride Month Novelty T-Shirt"
 PRODUCT_NAME_APPEND = "LGBTQ Gay Pride Novelty Hoodie"
 SIZE_LIST = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 REPEAT_ITEMS = len(SIZE_LIST)
