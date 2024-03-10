@@ -13,15 +13,17 @@ import base64
 import time
 
 import pandas as pd
+from dotenv import load_dotenv
 
 
+load_dotenv()
 API_KEY = os.getenv("API_KEY")
-MAX_ATTEMPTS = 3
-PARENT_SKU_PREPEND = "SH-"
-PRODUCT_NAME_PREPEND = "On COast"
+MAX_ATTEMPTS = 5
+PARENT_SKU_PREPEND = os.getenv("PARENT_SKU_PREPEND")
+PRODUCT_NAME_PREPEND = os.getenv("PRODUCT_NAME_PREPEND")
 # Tank tops: "Funny Gym Workout Novelty Tanktop"
 # Shirts: "Funny LGBTQ Gay Pride Month Novelty T-Shirt"
-PRODUCT_NAME_APPEND = "Novelty T-Shirt"
+PRODUCT_NAME_APPEND = "LGBTQ Gay Pride Novelty Hoodie"
 SIZE_LIST = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 REPEAT_ITEMS = len(SIZE_LIST)
 CHILD_SKU_CHARS = 8
@@ -144,13 +146,7 @@ def create_product_name(product_object: dict):
 
 def main():
     """Main driver function."""
-    # files_and_urls = get_urls()
-    files_and_urls = [
-        {"filename": "CALM T-SHIRT BLACK.png", "url": "test1"},
-        {"filename": "HYPER T-SHIRT BLUE.png", "url": "test2"},
-        {"filename": "ZEN MODE GALAXY SHIRT GREY.png", "url": "test3"},
-        {"filename": "ST PATRICK'S DAY LUCKY CLOVER T-SHIRT GREEN.png", "url": "test4"},
-    ]
+    files_and_urls = get_urls()
     products_with_skus = add_skus(files_and_urls)
     for product in products_with_skus:
         product["product_name"] = create_product_name(product)
