@@ -166,10 +166,10 @@ def display_download_button(df: pd.DataFrame):
     """Display DataFrame and download button."""
     csv = df.to_csv(index=False).encode("utf-8")
     output_file_name = f"products_{datetime.today().strftime('%Y%m%d_%H%M%S')}.csv"
-    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", key="download-top")
+    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", type="primary", key="download-top")
     st.dataframe(df, height=35 * len(df) + 3, hide_index=True)
-    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", key="download-bottom")
-
+    st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", type="primary", key="download-bottom")
+type="primary", 
 def main():
     """Main driver function."""
     files_and_urls = get_urls()
