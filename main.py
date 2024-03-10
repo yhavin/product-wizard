@@ -27,12 +27,12 @@ images = form.file_uploader("Upload images", accept_multiple_files=True, type=["
 form.info("Note: Image filenames must end with color preceded by space or hyphen, e.g., 'Zen Ramen Bowl T-Shirt Blue.png'")
 API_KEY = form.text_input("API key", value="8c14c34665298adb85a1b59a841fb72b").strip()
 PARENT_SKU_PREFIX = form.text_input("Parent SKU prefix", placeholder="e.g., SH, TNK, HDIE").strip()
+CHILD_SKU_CHARS = form.number_input("Child SKU characters", min_value=6, max_value=12, value=8)
 PRODUCT_NAME_PREFIX = form.text_input("Product name prefix", value="On Coast").strip()
-PRODUCT_NAME_APPEND = form.text_input("Product name appended words", placeholder="e.g., Celebratory Novelty T-Shirt").strip()
+PRODUCT_NAME_APPEND = form.text_input("Product name ending words", placeholder="e.g., Celebratory Novelty T-Shirt").strip()
 size_list_options = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 SIZE_LIST = form.multiselect("Sizes", options=size_list_options, default=size_list_options)
 size_mapping = {value: index for index, value in enumerate(SIZE_LIST)}
-CHILD_SKU_CHARS = form.number_input("Child SKU characters", min_value=6, max_value=12, value=8)
 
 submit = form.form_submit_button("Submit")
 
