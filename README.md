@@ -5,7 +5,7 @@ Using a folder of images, return a CSV with image URLs, product names, parent an
 Perfect for bulk uploading listings using the Amazon template.
 
 ## Quick start
-1. Download `main.py`.
+1. Download `local.py`.
 2. Install required libraries.
 ```shell
 $ pip install -r requirements.txt
@@ -13,7 +13,7 @@ $ pip install -r requirements.txt
 3. Add images to a sibling folder named `images`.
 4. Add your ImgBB API key to a `.env` file.
 5. Set your constant variables at the beginning of the module.
-6. Run module.
+6. Run `local.py` module.
 7. CSV is output to working directory, sorted by filename then size.
 
 ## Example
