@@ -141,7 +141,6 @@ def create_product_name(product_object: dict):
     product_name = f"{PRODUCT_NAME_PREPEND} {product_upper} {PRODUCT_NAME_APPEND}, {color}, {size}"
     return product_name
 
-
 def main():
     """Main driver function."""
     files_and_urls = get_urls()
