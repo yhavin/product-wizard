@@ -5,7 +5,7 @@ Using a folder of images, return a CSV with image URLs, product names, parent an
 Perfect for bulk uploading listings using the Amazon template.
 
 ## Quick start
-1. Download `local.py`.
+1. Download `local.py` and `requirements-local.txt`.
 2. Install required libraries.
 ```shell
 $ pip install -r requirements-local.txt
