@@ -7,11 +7,11 @@ Author: Yakir Havin
 """
 
 
-import requests
 import os
 import base64
 import time
 
+import requests
 import pandas as pd
 from dotenv import load_dotenv
 
