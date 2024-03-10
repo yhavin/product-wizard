@@ -165,7 +165,7 @@ def create_product_name(product_object: dict):
 def display_download_button(df: pd.DataFrame):
     """Display DataFrame and download button."""
     csv = df.to_csv(index=False).encode("utf-8")
-    output_file_name = f"products_{datetime.today().strftime("%Y%m%d_%H%M%S")}.csv"
+    output_file_name = f"products_{datetime.today().strftime('%Y%m%d_%H%M%S')}.csv"
     st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", key="download-top")
     st.dataframe(df, height=35 * len(df) + 3, hide_index=True)
     st.download_button("Download CSV", data=csv, file_name=output_file_name, mime="text/csv", key="download-bottom")
@@ -173,11 +173,6 @@ def display_download_button(df: pd.DataFrame):
 def main():
     """Main driver function."""
     files_and_urls = get_urls()
-    # files_and_urls = [
-    #     {"filename": "kkjbljhv blkg-hcg green.png", "url": "test1"},
-    #     {"filename": "abcbfhshs jhjhvjhjdjf black.png", "url": "test1"},
-    #     {"filename": "jhdbfldbd s;sbcsha djss blue.png", "url": "test1"},
-    # ]
     products_with_skus = add_skus(files_and_urls)
     for product in products_with_skus:
         product["product_name"] = create_product_name(product)
