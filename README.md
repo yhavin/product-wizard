@@ -8,7 +8,7 @@ Perfect for bulk uploading listings using the Amazon template.
 1. Download `local.py`.
 2. Install required libraries.
 ```shell
-$ pip install -r requirements.txt
+$ pip install -r requirements-local.txt
 ```
 3. Add images to a sibling folder named `images`.
 4. Add your ImgBB API key to a `.env` file.
