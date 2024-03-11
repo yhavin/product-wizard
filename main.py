@@ -61,8 +61,7 @@ def get_urls():
 
     status_window = st.status("🪄 Working some magic...")
     
-    for i in range(len(images)):
-        image = images[i]
+    for image in images:
         image_name = image.name
         print("Start:  ", image_name)
 
