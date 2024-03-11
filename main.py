@@ -30,7 +30,7 @@ PARENT_SKU_PREFIX = form.text_input("Parent SKU prefix", placeholder="e.g., SH, 
 CHILD_SKU_CHARS = form.number_input("Child SKU characters", min_value=6, max_value=12, value=8)
 PRODUCT_NAME_PREFIX = form.text_input("Product name prefix", value="On Coast").strip()
 PRODUCT_NAME_APPEND = form.text_input("Product name ending words", placeholder="e.g., Celebratory Novelty T-Shirt").strip()
-size_list_options = ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
+size_list_options = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]
 SIZE_LIST = form.multiselect("Sizes", options=size_list_options, default=size_list_options)
 size_mapping = {value: index for index, value in enumerate(SIZE_LIST)}
 
