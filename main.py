@@ -80,8 +80,7 @@ def get_urls():
                     break
                 else:
                     print("Fail:   ", image_name)
-                    print(response["status"])
-                    print(response["content"])
+                    print(response)
                     if attempt == MAX_ATTEMPTS:
                         print(f"Final attempt {MAX_ATTEMPTS} failed.")
                     else:
