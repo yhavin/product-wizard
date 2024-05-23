@@ -66,10 +66,10 @@ def get_urls():
         print("Start:  ", image_name)
 
         for attempt in range(1, MAX_ATTEMPTS + 1):
+            encoded_image = encode(image)
+            response = upload(encoded_image)
+
             try:
-                encoded_image = encode(image)
-                response = upload(encoded_image)
-                
                 if response["status"] == 200:
                     print("Success:", image_name)
                     data = response["data"]
@@ -82,13 +82,16 @@ def get_urls():
                     print("Fail:   ", image_name)
                     print(response)
                     if attempt == MAX_ATTEMPTS:
-                        print(f"Final attempt {MAX_ATTEMPTS} failed.")
+                        print(f"Final attempt {MAX_ATTEMPTS} failed: {response}")
+                        st.error(response)
                     else:
                         print("Retrying...") 
-            except Exception as e:
-                print(f"Exception on attempt {attempt}: {e}")
+            except Exception:
+                print(f"Exception on attempt {attempt}: {response}")
+                st.error(response)
                 if attempt == MAX_ATTEMPTS:
-                    print(f"Final attempt {MAX_ATTEMPTS} failed.")
+                    print(f"Final attempt {MAX_ATTEMPTS} failed: {response}")
+                    st.error(response)
                 else:
                     print("Retrying...") 
 
