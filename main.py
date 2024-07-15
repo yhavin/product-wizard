@@ -52,7 +52,11 @@ def upload(encoded_image):
         "image": encoded_image
     }
     response = requests.post(url, data=payload)
-    return response.json()
+    try:
+        return response.json()
+    except Exception as e:
+        print("Response:", response)
+        print("Error:", e)
 
 def get_urls():
     """Upload images to ImgBB with retries, and display progress."""
