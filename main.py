@@ -21,7 +21,7 @@ st.title("Amazon Product Wizard")
 st.caption("Developed by Yakir Havin")
 
 # Form input setup and constant declarations
-MAX_ATTEMPTS = 5
+MAX_ATTEMPTS = 6
 form = st.form(key="input-form")
 images = form.file_uploader("Upload images", accept_multiple_files=True, type=["png", "jpg"])
 form.info("Note: Image filenames must end with color preceded by space or hyphen, e.g., 'Zen Ramen Bowl T-Shirt Blue.png'")
